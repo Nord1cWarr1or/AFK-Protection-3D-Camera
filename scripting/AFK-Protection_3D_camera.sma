@@ -248,3 +248,8 @@ CreateCvars()
         .description = GetCvarDesc("AFK_CAM_HIDE_HUD")),
         g_pCvarValue[CAM_HIDE_HUD]);
 }
+
+public OnConfigsExecuted()
+{
+    register_cvar("AFKProtection_3DCamera_version", PLUGIN_VERSION, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
+}
