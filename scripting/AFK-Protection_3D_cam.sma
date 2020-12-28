@@ -1,3 +1,21 @@
+/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *
+*                                                                                       *
+*   Plugin: "AFK Protection: 3D Camera"                                                 *
+*                                                                                       *
+*   Official repository: https://github.com/Nord1cWarr1or/AFK-Protection-3D-Camera      *
+*                                                                                       *
+*   Contacts of the author: Telegram: @NordicWarrior                                    *
+*                                                                                       *
+*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *
+*                                                                                       *
+*   Плагин: "Защита АФК: 3D Камера"                                                     *
+*                                                                                       *
+*   Официальный репозиторий: https://github.com/Nord1cWarr1or/AFK-Protection-3D-Camera  *
+*                                                                                       *
+*   Связь с автором: Telegram: @NordicWarrior                                           *
+*                                                                                       *
+*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
+
 #include <amxmodx>
 #include <fakemeta>
 #include <reapi>
