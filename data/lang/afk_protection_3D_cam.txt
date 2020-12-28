@@ -1,0 +1,11 @@
+[en]
+AFK_CAM_HEIGHT          = Camera height above the player
+AFK_CAM_DISTANCE        = Distance of the camera from the player
+AFK_CAM_ROTATION_SPEED  = Camera rotation speed
+AFK_CAM_HIDE_HUD        = Hide HUD^n0 - Do not hide^n1 - Hide crosshair only^n2 - Hide everything
+
+[ru]
+AFK_CAM_HEIGHT          = Высота камеры над игроком
+AFK_CAM_DISTANCE        = Дистанция камеры от игрока
+AFK_CAM_ROTATION_SPEED  = Скорость вращения камеры
+AFK_CAM_HIDE_HUD        = Скрытие худа^n0 - Не скрывать^n1 - Скрывать только прицел^n2 - Скрывать всё
