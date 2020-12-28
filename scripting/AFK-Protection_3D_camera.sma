@@ -69,7 +69,9 @@ public plugin_precache()
 
 public OnConfigsExecuted()
 {
-    g_iCvarValue_RoundTime = get_cvar_num("mp_roundtime");
+    register_cvar("AFKProtection_3DCamera_version", PLUGIN_VERSION, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
+    
+    g_iCvarValue_RoundTime = get_cvar_num("mp_roundtime");    
 }
 
 public OnPlayerBecameAFK_post(const pPlayer)
@@ -247,9 +249,4 @@ CreateCvars()
     bind_pcvar_num(create_cvar("afk_cam_hide_hud", "2",
         .description = GetCvarDesc("AFK_CAM_HIDE_HUD")),
         g_pCvarValue[CAM_HIDE_HUD]);
-}
-
-public OnConfigsExecuted()
-{
-    register_cvar("AFKProtection_3DCamera_version", PLUGIN_VERSION, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
 }
