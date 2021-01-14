@@ -2,6 +2,7 @@
 *                                                                                       *
 *   Plugin: "AFK Protection: 3D Camera"                                                 *
 *                                                                                       *
+*   Official plugin support: https://dev-cs.ru/threads/13904/                           *
 *   Official repository: https://github.com/Nord1cWarr1or/AFK-Protection-3D-Camera      *
 *                                                                                       *
 *   Contacts of the author: Telegram: @NordicWarrior                                    *
@@ -10,6 +11,7 @@
 *                                                                                       *
 *   Плагин: "Защита АФК: 3D Камера"                                                     *
 *                                                                                       *
+*   Официальная поддержка плагина: https://dev-cs.ru/threads/13904/                     *
 *   Официальный репозиторий: https://github.com/Nord1cWarr1or/AFK-Protection-3D-Camera  *
 *                                                                                       *
 *   Связь с автором: Telegram: @NordicWarrior                                           *
@@ -23,7 +25,7 @@
 #include <msgstocks>
 #include <afk_protection>
 
-new const PLUGIN_VERSION[] = "0.0.9";
+new const PLUGIN_VERSION[] = "0.0.10";
 
 #define AUTO_CONFIG		// Comment out if you don't want the plugin config to be created automatically in "configs/plugins"
 
@@ -45,6 +47,7 @@ enum _:Cvars
 new g_pCvarValue[Cvars];
 new g_iCvarValue_RoundTime;
 new g_iRotatingSide[MAX_PLAYERS + 1];
+new g_iCameraEnt[MAX_PLAYERS + 1] = { NULLENT, ... };
 
 public plugin_init()
 {
@@ -110,17 +113,14 @@ public RG_PlayerSpawn_Post(const pPlayer)
 
     if(apr_get_player_afk(pPlayer))
     {
-        CreateCam(pPlayer);
+        engset_view(pPlayer, g_iCameraEnt[pPlayer]);
+        client_cmd(pPlayer, "stopsound");
 
         switch(g_pCvarValue[CAM_HIDE_HUD])
         {
             case 1: hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_Crosshair : HideElement_Crosshair | HideElement_Timer);
             case 2: hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_All : HideElement_All | HideElement_Timer);
         }
-    }
-    else
-    {
-        RemoveCam(pPlayer, true);
     }
 }
 
@@ -157,6 +157,8 @@ CreateCam(const pPlayer)
 
     set_entvar(iCameraEnt, var_nextthink, get_gametime() + 0.01);
     SetThink(iCameraEnt, "OnCamThink");
+
+    g_iCameraEnt[pPlayer] = iCameraEnt;
 }
 
 RemoveCam(pPlayer, bool:bAttachViewToPlayer)
@@ -177,7 +179,9 @@ RemoveCam(pPlayer, bool:bAttachViewToPlayer)
         if(get_entvar(iCameraEnt, var_owner) == pPlayer)
         {
             set_entvar(iCameraEnt, var_flags, FL_KILLME);
-            dllfunc(DLLFunc_Think, iCameraEnt);
+
+            g_iCameraEnt[pPlayer] = NULLENT;
+            break;
         }
     }
 }
