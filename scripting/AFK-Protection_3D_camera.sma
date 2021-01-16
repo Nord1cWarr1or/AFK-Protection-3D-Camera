@@ -25,7 +25,7 @@
 #include <msgstocks>
 #include <afk_protection>
 
-new const PLUGIN_VERSION[] = "0.0.10";
+new const PLUGIN_VERSION[] = "0.0.11";
 
 #define AUTO_CONFIG		// Comment out if you don't want the plugin config to be created automatically in "configs/plugins"
 
@@ -48,6 +48,7 @@ new g_pCvarValue[Cvars];
 new g_iCvarValue_RoundTime;
 new g_iRotatingSide[MAX_PLAYERS + 1];
 new g_iCameraEnt[MAX_PLAYERS + 1] = { NULLENT, ... };
+new g_iPreviousPlayerView[MAX_PLAYERS + 1] = { NULLENT, ... };
 
 public plugin_init()
 {
@@ -104,6 +105,8 @@ public OnPlayerBack_post(const pPlayer)
 public client_disconnected(pPlayer)
 {
     RemoveCam(pPlayer, false);
+
+    g_iPreviousPlayerView[pPlayer] = NULLENT;
 }
 
 public RG_PlayerSpawn_Post(const pPlayer)
@@ -151,6 +154,8 @@ CreateCam(const pPlayer)
     set_entvar(iCameraEnt, var_solid, SOLID_NOT);
     set_entvar(iCameraEnt, var_movetype, MOVETYPE_NOCLIP);
     set_entvar(iCameraEnt, var_rendermode, kRenderTransColor);
+
+    g_iPreviousPlayerView[pPlayer] = get_viewent(pPlayer);
     
     engset_view(pPlayer, iCameraEnt);
     client_cmd(pPlayer, "stopsound");
@@ -165,7 +170,7 @@ RemoveCam(pPlayer, bool:bAttachViewToPlayer)
 {
     if(bAttachViewToPlayer)
     {
-        engset_view(pPlayer, pPlayer);
+        engset_view(pPlayer, g_iPreviousPlayerView[pPlayer]);
         client_cmd(pPlayer, "stopsound");
     }
 
@@ -176,7 +181,7 @@ RemoveCam(pPlayer, bool:bAttachViewToPlayer)
         if(!is_entity(iCameraEnt))
             continue;
 
-        if(get_entvar(iCameraEnt, var_owner) == pPlayer)
+        if(get_entvar(iCameraEnt, var_owner) == pPlayer && g_iCameraEnt[pPlayer] == iCameraEnt)
         {
             set_entvar(iCameraEnt, var_flags, FL_KILLME);
 
