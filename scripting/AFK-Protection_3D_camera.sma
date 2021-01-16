@@ -25,7 +25,7 @@
 #include <msgstocks>
 #include <afk_protection>
 
-new const PLUGIN_VERSION[] = "0.0.11";
+new const PLUGIN_VERSION[] = "0.0.12";
 
 #define AUTO_CONFIG		// Comment out if you don't want the plugin config to be created automatically in "configs/plugins"
 
@@ -78,7 +78,7 @@ public OnConfigsExecuted()
     g_iCvarValue_RoundTime = get_cvar_num("mp_roundtime");    
 }
 
-public OnPlayerBecameAFK_post(const pPlayer)
+public OnPlayerBecameAFK_pre(const pPlayer)
 {
     CreateCam(pPlayer);
 
