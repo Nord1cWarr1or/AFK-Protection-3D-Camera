@@ -25,7 +25,7 @@
 #include <msgstocks>
 #include <afk_protection>
 
-new const PLUGIN_VERSION[] = "0.0.12";
+new const PLUGIN_VERSION[] = "0.0.13";
 
 #define AUTO_CONFIG		// Comment out if you don't want the plugin config to be created automatically in "configs/plugins"
 
