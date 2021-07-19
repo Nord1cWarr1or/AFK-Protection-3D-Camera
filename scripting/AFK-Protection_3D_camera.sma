@@ -170,7 +170,15 @@ RemoveCam(pPlayer, bool:bAttachViewToPlayer)
 {
     if(bAttachViewToPlayer)
     {
-        engset_view(pPlayer, g_iPreviousPlayerView[pPlayer]);
+        if(!is_nullent(g_iPreviousPlayerView[pPlayer]))
+        {
+            engset_view(pPlayer, g_iPreviousPlayerView[pPlayer]);
+        }
+        else
+        {
+            engset_view(pPlayer, pPlayer);
+        }
+        
         client_cmd(pPlayer, "stopsound");
     }
 
