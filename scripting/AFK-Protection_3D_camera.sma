@@ -145,7 +145,7 @@ CreateCam(const pPlayer)
 {
     new iCameraEnt = rg_create_entity(CAMERA_CLASSNAME);
 
-    if(!is_entity(iCameraEnt))
+    if(is_nullent(iCameraEnt))
         return;
     
     engfunc(EngFunc_SetModel, iCameraEnt, CAMERA_MODEL);
@@ -178,7 +178,7 @@ RemoveCam(pPlayer, bool:bAttachViewToPlayer)
 
     while((iCameraEnt = rg_find_ent_by_class(iCameraEnt, CAMERA_CLASSNAME)))
     {
-        if(!is_entity(iCameraEnt))
+        if(is_nullent(iCameraEnt))
             continue;
 
         if(get_entvar(iCameraEnt, var_owner) == pPlayer && g_iCameraEnt[pPlayer] == iCameraEnt)
@@ -195,7 +195,7 @@ public OnCamThink(iCameraEnt)
 {
     new pPlayer = get_entvar(iCameraEnt, var_owner);
 
-    if(!is_user_alive(pPlayer) || !is_entity(iCameraEnt))
+    if(!is_user_alive(pPlayer) || is_nullent(iCameraEnt))
         return;
 
     /* --- Рассчёт движения камеры по окружности --- */
