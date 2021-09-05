@@ -22,7 +22,6 @@
 #include <fakemeta>
 #include <reapi>
 #include <xs>
-#include <msgstocks>
 #include <afk_protection>
 
 new const PLUGIN_VERSION[] = "0.0.13";
@@ -45,7 +44,6 @@ enum _:Cvars
 };
 
 new g_pCvarValue[Cvars];
-new g_iCvarValue_RoundTime;
 new g_iRotatingSide[MAX_PLAYERS + 1];
 new g_iCameraEnt[MAX_PLAYERS + 1] = { NULLENT, ... };
 new g_iPreviousPlayerView[MAX_PLAYERS + 1] = { NULLENT, ... };
@@ -74,8 +72,6 @@ public plugin_precache()
 public OnConfigsExecuted()
 {
     register_cvar("AFKProtection_3DCamera_version", PLUGIN_VERSION, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
-    
-    g_iCvarValue_RoundTime = get_cvar_num("mp_roundtime");    
 }
 
 public OnPlayerBecameAFK_pre(const pPlayer)
@@ -84,8 +80,8 @@ public OnPlayerBecameAFK_pre(const pPlayer)
 
     switch(g_pCvarValue[CAM_HIDE_HUD])
     {
-        case 1: hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_Crosshair : HideElement_Crosshair | HideElement_Timer);
-        case 2: hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_All : HideElement_All | HideElement_Timer);
+        case 1: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) | HIDEHUD_CROSSHAIR);
+        case 2: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) | HIDEHUD_ALL);
     }
 }
 
@@ -93,8 +89,11 @@ public OnPlayerBack_post(const pPlayer)
 {
     RemoveCam(pPlayer, true);
 
-    if(g_pCvarValue[CAM_HIDE_HUD])
-        hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_None : HideElement_Timer);
+    switch(g_pCvarValue[CAM_HIDE_HUD])
+    {
+        case 1: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) & ~HIDEHUD_CROSSHAIR);
+        case 2: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) & ~HIDEHUD_ALL);
+    }
 
     if(g_iRotatingSide[pPlayer])
         g_iRotatingSide[pPlayer] = 0;
@@ -121,8 +120,8 @@ public RG_PlayerSpawn_Post(const pPlayer)
 
         switch(g_pCvarValue[CAM_HIDE_HUD])
         {
-            case 1: hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_Crosshair : HideElement_Crosshair | HideElement_Timer);
-            case 2: hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_All : HideElement_All | HideElement_Timer);
+            case 1: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) | HIDEHUD_CROSSHAIR);
+            case 2: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) | HIDEHUD_ALL);
         }
     }
 }
@@ -136,8 +135,11 @@ public RG_PlayerKilled_Post(const pPlayer)
     {
         RemoveCam(pPlayer, true);
 
-        if(!g_pCvarValue[CAM_HIDE_HUD])
-            hide_hud_elements(pPlayer, g_iCvarValue_RoundTime ? HideElement_None : HideElement_Timer);
+        switch(g_pCvarValue[CAM_HIDE_HUD])
+        {
+            case 1: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) & ~HIDEHUD_CROSSHAIR);
+            case 2: set_member(pPlayer, m_iHideHUD, get_member(pPlayer, m_iHideHUD) & ~HIDEHUD_ALL);
+        }
     }
 }
 
